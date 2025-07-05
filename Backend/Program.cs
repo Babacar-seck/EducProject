@@ -14,11 +14,12 @@ builder.Services.AddSwaggerGen();
 
 // Database
 builder.Services.AddDbContext<EducProjectContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Services
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IProgressService, ProgressService>();
 
 // CORS
 builder.Services.AddCors(options =>
@@ -63,11 +64,30 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
-// Ensure database is created
+// Ensure database is created and seeded
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<EducProjectContext>();
-    context.Database.EnsureCreated();
+    
+    try
+    {
+        // Create database if it doesn't exist
+        context.Database.EnsureCreated();
+        Console.WriteLine("✅ Database created successfully!");
+        
+        // Check if admin user exists, if not seed the database
+        if (!context.Users.Any(u => u.Username == "admin"))
+        {
+            Console.WriteLine("🌱 Seeding database with initial data...");
+            context.SeedInitialData();
+            Console.WriteLine("✅ Database seeded successfully!");
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"❌ Error creating database: {ex.Message}");
+        throw;
+    }
 }
 
 app.Run(); 

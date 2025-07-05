@@ -42,6 +42,11 @@ namespace EducProject.API.Models
         public int? ParentId { get; set; }
         public User? Parent { get; set; }
         public List<User> Children { get; set; } = new();
+        
+        // Progress tracking
+        public List<Progress> Progresses { get; set; } = new();
+        public List<UserBadge> UserBadges { get; set; } = new();
+        public List<Notification> Notifications { get; set; } = new();
     }
 
     public enum UserRole

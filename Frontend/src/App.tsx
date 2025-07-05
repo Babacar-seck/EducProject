@@ -5,6 +5,7 @@ import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import RegisterChild from './components/auth/RegisterChild';
 import Dashboard from './components/dashboard/Dashboard';
+import ProgressSimulator from './components/test/ProgressSimulator';
 import PrivateRoute from './components/auth/PrivateRoute';
 import './App.css';
 
@@ -22,6 +23,14 @@ function App() {
               element={
                 <PrivateRoute>
                   <Dashboard />
+                </PrivateRoute>
+              } 
+            />
+            <Route 
+              path="/test" 
+              element={
+                <PrivateRoute>
+                  <ProgressSimulator />
                 </PrivateRoute>
               } 
             />

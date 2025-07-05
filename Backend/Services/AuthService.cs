@@ -1,5 +1,6 @@
 using EducProject.API.Data;
 using EducProject.API.Models;
+using EducProject.API.Models.DTOs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -99,5 +100,7 @@ namespace EducProject.API.Services
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
+
+      
     }
 } 

@@ -1,3 +1,4 @@
+using EducProject.API.Models;
 using EducProject.API.Models.DTOs;
 
 namespace EducProject.API.Services

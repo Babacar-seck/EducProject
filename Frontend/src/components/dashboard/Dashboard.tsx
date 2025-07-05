@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { User } from '../../types';
 import { authService } from '../../services/authService';
+import ParentDashboard from './ParentDashboard';
 
 const Dashboard: React.FC = () => {
   const { user, logout } = useAuth();
@@ -55,6 +56,12 @@ const Dashboard: React.FC = () => {
     return <div>Chargement...</div>;
   }
 
+  // Show ParentDashboard for parents
+  if (user.role === 2) {
+    return <ParentDashboard />;
+  }
+
+  // Default dashboard for other roles
   return (
     <div className="dashboard-container">
       <div className="dashboard-header">
@@ -76,38 +83,6 @@ const Dashboard: React.FC = () => {
             <p><strong>Dernière connexion:</strong> {new Date(user.lastLoginAt).toLocaleDateString('fr-FR')}</p>
           )}
         </div>
-
-        {user.role === 2 && ( // Parent role
-          <div className="dashboard-card">
-            <h3>Mes enfants</h3>
-            {loading ? (
-              <p>Chargement des enfants...</p>
-            ) : children.length > 0 ? (
-              <div>
-                {children.map((child) => (
-                  <div key={child.id} style={{ 
-                    border: '1px solid #ddd', 
-                    padding: '10px', 
-                    margin: '10px 0', 
-                    borderRadius: '5px' 
-                  }}>
-                    <p><strong>{child.firstName} {child.lastName}</strong></p>
-                    <p>Nom d'utilisateur: {child.username}</p>
-                    <p>Âge: {child.age} ans</p>
-                    <p>Niveau: {getLevelDisplayName(child.level)}</p>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p>Aucun enfant enregistré</p>
-            )}
-            <div style={{ marginTop: '15px' }}>
-              <a href="/register-child" className="btn btn-success">
-                Ajouter un enfant
-              </a>
-            </div>
-          </div>
-        )}
 
         <div className="dashboard-card">
           <h3>Actions rapides</h3>
